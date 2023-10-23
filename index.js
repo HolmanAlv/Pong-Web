@@ -1,4 +1,4 @@
-//alert("Presiona para inciar")
+alert("Presiona para iniciar")
 const canvas = document.getElementById("canvas")
 //const canvas = document.querySelector('canvas')
 //canvas.width = 800
@@ -39,10 +39,11 @@ document.addEventListener("keydown", movePaddles);
 
 
 //Loop del juego
-refreshCanvas = 1
+refreshCanvas = 2
 setInterval(loop, refreshCanvas);
 
 function loop() {
+    aiPlayer()
     draw()
     update()
 }
@@ -82,6 +83,7 @@ function draw() {
 }
 
 function update() {
+
     //Mover la pelota
     ballX += ballSpeed.X
     ballY += ballSpeed.Y
@@ -119,9 +121,9 @@ function update() {
     }
 }
 
-//Resetear la pelota después de anotar
+//reiniciar la pelota después de anotar
 function resetBall() {
-    const ballSpeedX = 5
+    const newBallSpeed = 5
     paddleSpeed = initialPaddleSpeed
 
 
@@ -129,13 +131,13 @@ function resetBall() {
     if(saque){
         ballX = leftPaddleX+paddleWidth + ballRadius
         ballY = leftPaddleY + paddleHeight / 2
-        ballSpeed.X = ballSpeedX
+        ballSpeed.X = newBallSpeed
         ballSpeed.Y = Math.random()>=0.5 ? Math.random()*10: -Math.random()*10
     }
     else{
         ballX = rightPaddleX - paddleWidth - ballRadius
         ballY = rightPaddleY + paddleHeight / 2
-        ballSpeed.X = -ballSpeedX
+        ballSpeed.X = -newBallSpeed
         ballSpeed.Y = Math.random()>=0.5 ? Math.random()*10: -Math.random()*10
     }
         
@@ -166,4 +168,21 @@ function movePaddles(event) {
     if (key == 40 && rightPaddleY + paddleHeight < canvas.height) {
         rightPaddleY += paddleSpeed
     }
+}
+
+//Jugar npc
+function aiPlayer (){
+    let goNPC = true
+
+    //Player 2 AI
+    if (goNPC && (ballY+ballRadius < rightPaddleY || ballY-ballRadius>rightPaddleY+paddleHeight )) {
+        rightPaddleY = ballY - paddleHeight/2
+    } 
+
+
+    //Player 1 AI
+    let goNPC2 = false
+    if (goNPC2 && (ballY+ballRadius < leftPaddleY || ballY-ballRadius>leftPaddleY+paddleHeight )) {
+        leftPaddleY = ballY - paddleHeight/2
+    } 
 }
